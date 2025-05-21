@@ -12,11 +12,11 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/joho/godotenv"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
 )
 
 func main() {
-	// 解析命令行参数
+	// 解析命令行参�?
 	var command string
 	flag.StringVar(&command, "command", "up", "迁移命令: up, down, version")
 	flag.Parse()
@@ -24,7 +24,7 @@ func main() {
 	// 加载环境变量
 	err := godotenv.Load()
 	if err != nil {
-		log.Println("警告: 未找到 .env 文件，使用环境变量")
+		log.Println("警告: 未找�?.env 文件，使用环境变�?)
 	}
 
 	// 加载配置
@@ -77,7 +77,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("获取版本失败: %v", err)
 		}
-		log.Printf("当前版本: %d, 是否有未完成的迁移: %v", version, dirty)
+		log.Printf("当前版本: %d, 是否有未完成的迁�? %v", version, dirty)
 	default:
 		log.Fatalf("未知命令: %s", command)
 	}
@@ -85,7 +85,7 @@ func main() {
 
 // getMigrationsPath 获取迁移文件路径
 func getMigrationsPath() (string, error) {
-	// 尝试从当前目录获取
+	// 尝试从当前目录获�?
 	currentDir, err := os.Getwd()
 	if err != nil {
 		return "", err
@@ -94,12 +94,13 @@ func getMigrationsPath() (string, error) {
 	// 尝试找到 migrations 目录
 	migrationsPath := filepath.Join(currentDir, "migrations")
 	if _, err := os.Stat(migrationsPath); os.IsNotExist(err) {
-		// 如果当前目录下没有 migrations 目录，尝试上一级目录
+		// 如果当前目录下没�?migrations 目录，尝试上一级目�?
 		migrationsPath = filepath.Join(filepath.Dir(currentDir), "migrations")
 		if _, err := os.Stat(migrationsPath); os.IsNotExist(err) {
-			return "", fmt.Errorf("未找到 migrations 目录")
+			return "", fmt.Errorf("未找�?migrations 目录")
 		}
 	}
 
 	return migrationsPath, nil
 }
+

@@ -7,16 +7,16 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/internal/middleware"
-	chatService "github.com/your-org/lyss-chat-backend/internal/service/chat"
-	"github.com/your-org/lyss-chat-backend/internal/util"
-	"github.com/your-org/lyss-chat-backend/pkg/config"
-	"github.com/your-org/lyss-chat-backend/pkg/db"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/internal/middleware"
+	chatService "github.com/zhuiye8/Lyss-chat-server/internal/service/chat"
+	"github.com/zhuiye8/Lyss-chat-server/internal/util"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
-// MessageHandler 表示消息处理器
+// MessageHandler 表示消息处理�?
 type MessageHandler struct {
 	service *chatService.Service
 	logger  *logger.Logger
@@ -24,7 +24,7 @@ type MessageHandler struct {
 
 // NewMessageHandler 创建一个新的消息处理器
 func NewMessageHandler(db *db.Postgres, cfg *config.Config, logger *logger.Logger) *MessageHandler {
-	// 注意：这里需要传入 aiGraphs，但我们暂时传入 nil，后续会修复
+	// 注意：这里需要传�?aiGraphs，但我们暂时传入 nil，后续会修复
 	service := chatService.NewService(db, nil, cfg, logger)
 	return &MessageHandler{
 		service: service,
@@ -75,7 +75,7 @@ func (h *MessageHandler) ListMessages(w http.ResponseWriter, r *http.Request) {
 	util.SuccessResponse(w, response, http.StatusOK)
 }
 
-// SendMessage 处理发送消息请求
+// SendMessage 处理发送消息请�?
 func (h *MessageHandler) SendMessage(w http.ResponseWriter, r *http.Request) {
 	// 获取路径参数
 	vars := mux.Vars(r)
@@ -85,7 +85,7 @@ func (h *MessageHandler) SendMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 解析请求体
+	// 解析请求�?
 	var req chat.SendMessageRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		util.BadRequestError(w, "无效的请求体", nil)
@@ -101,22 +101,22 @@ func (h *MessageHandler) SendMessage(w http.ResponseWriter, r *http.Request) {
 	// 获取用户ID
 	userID, ok := middleware.GetUserID(r.Context())
 	if !ok {
-		util.UnauthorizedError(w, "未认证")
+		util.UnauthorizedError(w, "未认�?)
 		return
 	}
 
 	// 调用服务
 	message, err := h.service.SendMessage(userID, canvasID, &req)
 	if err != nil {
-		h.logger.Error("发送消息失败", err)
-		util.InternalServerError(w, "发送消息失败")
+		h.logger.Error("发送消息失�?, err)
+		util.InternalServerError(w, "发送消息失�?)
 		return
 	}
 
 	util.SuccessResponse(w, message, http.StatusCreated)
 }
 
-// StreamMessage 处理流式发送消息请求
+// StreamMessage 处理流式发送消息请�?
 func (h *MessageHandler) StreamMessage(w http.ResponseWriter, r *http.Request) {
 	// 获取路径参数
 	vars := mux.Vars(r)
@@ -126,7 +126,7 @@ func (h *MessageHandler) StreamMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 解析请求体
+	// 解析请求�?
 	var req chat.SendMessageRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		util.BadRequestError(w, "无效的请求体", nil)
@@ -142,11 +142,11 @@ func (h *MessageHandler) StreamMessage(w http.ResponseWriter, r *http.Request) {
 	// 获取用户ID
 	userID, ok := middleware.GetUserID(r.Context())
 	if !ok {
-		util.UnauthorizedError(w, "未认证")
+		util.UnauthorizedError(w, "未认�?)
 		return
 	}
 
-	// 设置响应头
+	// 设置响应�?
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
@@ -155,12 +155,12 @@ func (h *MessageHandler) StreamMessage(w http.ResponseWriter, r *http.Request) {
 	// 调用服务
 	messageChan, err := h.service.StreamMessage(userID, canvasID, &req)
 	if err != nil {
-		h.logger.Error("流式发送消息失败", err)
-		util.InternalServerError(w, "流式发送消息失败")
+		h.logger.Error("流式发送消息失�?, err)
+		util.InternalServerError(w, "流式发送消息失�?)
 		return
 	}
 
-	// 发送用户消息确认
+	// 发送用户消息确�?
 	userMessage := map[string]interface{}{
 		"type":    "user",
 		"content": req.Content,
@@ -169,7 +169,7 @@ func (h *MessageHandler) StreamMessage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "data: %s\n\n", userMessageJSON)
 	w.(http.Flusher).Flush()
 
-	// 流式发送 AI 响应
+	// 流式发�?AI 响应
 	for message := range messageChan {
 		// 构建事件数据
 		event := map[string]interface{}{
@@ -181,16 +181,16 @@ func (h *MessageHandler) StreamMessage(w http.ResponseWriter, r *http.Request) {
 		// 序列化为 JSON
 		eventJSON, err := json.Marshal(event)
 		if err != nil {
-			h.logger.Error("序列化事件失败", err)
+			h.logger.Error("序列化事件失�?, err)
 			continue
 		}
 		
-		// 发送事件
+		// 发送事�?
 		fmt.Fprintf(w, "data: %s\n\n", eventJSON)
 		w.(http.Flusher).Flush()
 	}
 
-	// 发送结束事件
+	// 发送结束事�?
 	endEvent := map[string]interface{}{
 		"type": "done",
 	}
@@ -198,3 +198,4 @@ func (h *MessageHandler) StreamMessage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "data: %s\n\n", endEventJSON)
 	w.(http.Flusher).Flush()
 }
+

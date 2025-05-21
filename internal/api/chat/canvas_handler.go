@@ -6,16 +6,16 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/internal/middleware"
-	"github.com/your-org/lyss-chat-backend/internal/service/chat"
-	"github.com/your-org/lyss-chat-backend/internal/util"
-	"github.com/your-org/lyss-chat-backend/pkg/config"
-	"github.com/your-org/lyss-chat-backend/pkg/db"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/internal/middleware"
+	"github.com/zhuiye8/Lyss-chat-server/internal/service/chat"
+	"github.com/zhuiye8/Lyss-chat-server/internal/util"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
-// CanvasHandler 表示画布处理器
+// CanvasHandler 表示画布处理�?
 type CanvasHandler struct {
 	service *chat.Service
 	logger  *logger.Logger
@@ -23,7 +23,7 @@ type CanvasHandler struct {
 
 // NewCanvasHandler 创建一个新的画布处理器
 func NewCanvasHandler(db *db.Postgres, cfg *config.Config, logger *logger.Logger) *CanvasHandler {
-	// 注意：这里需要传入 aiGraphs，但我们暂时传入 nil，后续会修复
+	// 注意：这里需要传�?aiGraphs，但我们暂时传入 nil，后续会修复
 	service := chat.NewService(db, nil, cfg, logger)
 	return &CanvasHandler{
 		service: service,
@@ -93,7 +93,7 @@ func (h *CanvasHandler) GetCanvas(w http.ResponseWriter, r *http.Request) {
 	canvas, err := h.service.GetCanvas(id)
 	if err != nil {
 		h.logger.Error("获取画布详情失败", err)
-		util.NotFoundError(w, "画布不存在")
+		util.NotFoundError(w, "画布不存�?)
 		return
 	}
 
@@ -102,7 +102,7 @@ func (h *CanvasHandler) GetCanvas(w http.ResponseWriter, r *http.Request) {
 
 // CreateCanvas 处理创建画布请求
 func (h *CanvasHandler) CreateCanvas(w http.ResponseWriter, r *http.Request) {
-	// 解析请求体
+	// 解析请求�?
 	var req chat.CreateCanvasRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		util.BadRequestError(w, "无效的请求体", nil)
@@ -118,7 +118,7 @@ func (h *CanvasHandler) CreateCanvas(w http.ResponseWriter, r *http.Request) {
 	// 获取用户ID
 	userID, ok := middleware.GetUserID(r.Context())
 	if !ok {
-		util.UnauthorizedError(w, "未认证")
+		util.UnauthorizedError(w, "未认�?)
 		return
 	}
 
@@ -143,7 +143,7 @@ func (h *CanvasHandler) UpdateCanvas(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 解析请求体
+	// 解析请求�?
 	var req chat.UpdateCanvasRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		util.BadRequestError(w, "无效的请求体", nil)
@@ -154,7 +154,7 @@ func (h *CanvasHandler) UpdateCanvas(w http.ResponseWriter, r *http.Request) {
 	canvas, err := h.service.UpdateCanvas(id, &req)
 	if err != nil {
 		h.logger.Error("更新画布失败", err)
-		util.NotFoundError(w, "画布不存在")
+		util.NotFoundError(w, "画布不存�?)
 		return
 	}
 
@@ -175,9 +175,10 @@ func (h *CanvasHandler) DeleteCanvas(w http.ResponseWriter, r *http.Request) {
 	err := h.service.DeleteCanvas(id)
 	if err != nil {
 		h.logger.Error("删除画布失败", err)
-		util.NotFoundError(w, "画布不存在")
+		util.NotFoundError(w, "画布不存�?)
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
 }
+

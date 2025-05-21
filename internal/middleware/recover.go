@@ -6,11 +6,11 @@ import (
 	"runtime/debug"
 
 	"github.com/gorilla/mux"
-	"github.com/your-org/lyss-chat-2.0/backend/internal/util"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/util"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
-// Recover 中间件处理 panic
+// Recover 中间件处�?panic
 func Recover(log *logger.Logger) mux.MiddlewareFunc {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +21,7 @@ func Recover(log *logger.Logger) mux.MiddlewareFunc {
 					log.Errorf("PANIC: %v\n%s", err, stack)
 
 					// 返回 500 错误
-					util.InternalServerError(w, "服务器内部错误")
+					util.InternalServerError(w, "服务器内部错�?)
 				}
 			}()
 
@@ -29,3 +29,4 @@ func Recover(log *logger.Logger) mux.MiddlewareFunc {
 		})
 	}
 }
+

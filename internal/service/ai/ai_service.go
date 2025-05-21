@@ -7,9 +7,9 @@ import (
 	"github.com/cloudwego/eino"
 	"github.com/cloudwego/eino/schema"
 	"github.com/google/uuid"
-	"github.com/your-org/lyss-chat-backend/internal/ai/components"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/ai/components"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
 // ModelService 定义模型服务接口
@@ -42,7 +42,7 @@ type AIService struct {
 	logger         *logger.Logger
 }
 
-// NewAIService 创建一个新的 AIService 实例
+// NewAIService 创建一个新�?AIService 实例
 func NewAIService(
 	modelService ModelService,
 	messageRepo MessageRepository,
@@ -69,7 +69,7 @@ func (s *AIService) GenerateResponse(ctx context.Context, canvasID string, messa
 		return nil, err
 	}
 
-	// 如果未指定模型 ID，使用画布的模型 ID 或默认模型 ID
+	// 如果未指定模�?ID，使用画布的模型 ID 或默认模�?ID
 	if modelID == "" {
 		if canvas.ModelID != "" {
 			modelID = canvas.ModelID
@@ -81,7 +81,7 @@ func (s *AIService) GenerateResponse(ctx context.Context, canvasID string, messa
 	// 转换消息格式
 	einoMessages := convertToEinoMessages(messages)
 
-	// 创建模型适配器
+	// 创建模型适配�?
 	modelAdapter := components.NewChatModelAdapter(
 		&components.ModelServiceAdapter{ModelService: s.modelService},
 		modelID,
@@ -97,14 +97,14 @@ func (s *AIService) GenerateResponse(ctx context.Context, canvasID string, messa
 			return nil, err
 		}
 
-		// 获取最后一个响应
+		// 获取最后一个响�?
 		var lastResponse *schema.Message
 		for resp := range responseChan {
 			lastResponse = resp
 		}
 		response = lastResponse
 	} else {
-		// 非流式调用
+		// 非流式调�?
 		response, err = modelAdapter.Call(ctx, einoMessages)
 		if err != nil {
 			return nil, err
@@ -137,7 +137,7 @@ func (s *AIService) StreamResponse(ctx context.Context, canvasID string, message
 		return nil, err
 	}
 
-	// 如果未指定模型 ID，使用画布的模型 ID 或默认模型 ID
+	// 如果未指定模�?ID，使用画布的模型 ID 或默认模�?ID
 	if modelID == "" {
 		if canvas.ModelID != "" {
 			modelID = canvas.ModelID
@@ -149,7 +149,7 @@ func (s *AIService) StreamResponse(ctx context.Context, canvasID string, message
 	// 转换消息格式
 	einoMessages := convertToEinoMessages(messages)
 
-	// 创建模型适配器
+	// 创建模型适配�?
 	modelAdapter := components.NewChatModelAdapter(
 		&components.ModelServiceAdapter{ModelService: s.modelService},
 		modelID,
@@ -171,12 +171,12 @@ func (s *AIService) StreamResponse(ctx context.Context, canvasID string, message
 
 		var lastResponse *schema.Message
 		for resp := range responseChan {
-			// 发送响应
+			// 发送响�?
 			outputChan <- resp
 			lastResponse = resp
 		}
 
-		// 保存最终响应到数据库
+		// 保存最终响应到数据�?
 		if lastResponse != nil {
 			aiMessage := &chat.Message{
 				ID:        uuid.New().String(),
@@ -196,7 +196,7 @@ func (s *AIService) StreamResponse(ctx context.Context, canvasID string, message
 	return outputChan, nil
 }
 
-// convertToEinoMessages 将 chat.Message 转换为 schema.Message
+// convertToEinoMessages �?chat.Message 转换�?schema.Message
 func convertToEinoMessages(messages []*chat.Message) []*schema.Message {
 	einoMessages := make([]*schema.Message, 0, len(messages))
 	for _, msg := range messages {
@@ -207,3 +207,4 @@ func convertToEinoMessages(messages []*chat.Message) []*schema.Message {
 	}
 	return einoMessages
 }
+

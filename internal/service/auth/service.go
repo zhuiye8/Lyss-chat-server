@@ -8,11 +8,11 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/your-org/lyss-chat-backend/internal/domain/user"
-	"github.com/your-org/lyss-chat-backend/internal/repository/postgres"
-	"github.com/your-org/lyss-chat-backend/pkg/config"
-	"github.com/your-org/lyss-chat-backend/pkg/db"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/user"
+	"github.com/zhuiye8/Lyss-chat-server/internal/repository/postgres"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -25,14 +25,14 @@ type Service struct {
 	sessionManager *SessionManager
 }
 
-// NewService 创建一个新的认证服务
+// NewService 创建一个新的认证服�?
 func NewService(db *db.Postgres, redis *db.Redis, cfg *config.Config, logger *logger.Logger) *Service {
 	userRepo := postgres.NewUserRepository(db)
 
-	// 创建 Redis 客户端适配器
+	// 创建 Redis 客户端适配�?
 	redisClient := &redisClientAdapter{redis: redis}
 
-	// 创建会话管理器
+	// 创建会话管理�?
 	sessionManager := NewSessionManager(&redisClient, logger)
 
 	return &Service{
@@ -44,22 +44,22 @@ func NewService(db *db.Postgres, redis *db.Redis, cfg *config.Config, logger *lo
 	}
 }
 
-// redisClientAdapter 适配 Redis 客户端接口
+// redisClientAdapter 适配 Redis 客户端接�?
 type redisClientAdapter struct {
 	redis *db.Redis
 }
 
-// Set 实现 RedisClient 接口的 Set 方法
+// Set 实现 RedisClient 接口�?Set 方法
 func (a *redisClientAdapter) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error {
 	return a.redis.Client.Set(ctx, key, value, expiration).Err()
 }
 
-// Get 实现 RedisClient 接口的 Get 方法
+// Get 实现 RedisClient 接口�?Get 方法
 func (a *redisClientAdapter) Get(ctx context.Context, key string) (string, error) {
 	return a.redis.Client.Get(ctx, key).Result()
 }
 
-// Del 实现 RedisClient 接口的 Del 方法
+// Del 实现 RedisClient 接口�?Del 方法
 func (a *redisClientAdapter) Del(ctx context.Context, keys ...string) error {
 	return a.redis.Client.Del(ctx, keys...).Err()
 }
@@ -73,9 +73,9 @@ func (s *Service) Login(req *user.LoginRequest) (*user.LoginResponse, error) {
 		return nil, err
 	}
 
-	// 检查用户状态
+	// 检查用户状�?
 	if u.Status != user.UserStatusActive {
-		return nil, errors.New("用户未激活")
+		return nil, errors.New("用户未激�?)
 	}
 
 	// 验证密码
@@ -94,7 +94,7 @@ func (s *Service) Login(req *user.LoginRequest) (*user.LoginResponse, error) {
 		return nil, err
 	}
 
-	// 创建上下文
+	// 创建上下�?
 	ctx := context.Background()
 
 	// 存储刷新令牌
@@ -116,7 +116,7 @@ func (s *Service) Login(req *user.LoginRequest) (*user.LoginResponse, error) {
 	)
 	if err != nil {
 		s.logger.Error("创建会话失败", err)
-		// 继续处理，不要因为会话创建失败而阻止登录
+		// 继续处理，不要因为会话创建失败而阻止登�?
 	}
 
 	return &user.LoginResponse{
@@ -135,7 +135,7 @@ func (s *Service) RefreshToken(refreshToken string) (*user.LoginResponse, error)
 	refreshKey := fmt.Sprintf("refresh_token:%s", refreshToken)
 	userID, err := s.redis.Client.Get(ctx, refreshKey).Result()
 	if err != nil {
-		return nil, errors.New("无效的刷新令牌")
+		return nil, errors.New("无效的刷新令�?)
 	}
 
 	// 获取用户
@@ -144,9 +144,9 @@ func (s *Service) RefreshToken(refreshToken string) (*user.LoginResponse, error)
 		return nil, err
 	}
 
-	// 检查用户状态
+	// 检查用户状�?
 	if u.Status != user.UserStatusActive {
-		return nil, errors.New("用户未激活")
+		return nil, errors.New("用户未激�?)
 	}
 
 	// 生成新的访问令牌
@@ -176,10 +176,10 @@ func (s *Service) RefreshToken(refreshToken string) (*user.LoginResponse, error)
 
 	// 刷新会话
 	sessionID := newRefreshToken
-	// 尝试获取旧会话数据
+	// 尝试获取旧会话数�?
 	oldSessionData, err := s.sessionManager.GetSession(ctx, refreshToken)
 	if err == nil {
-		// 创建新会话，保留旧会话的 IP 和 UserAgent
+		// 创建新会话，保留旧会话的 IP �?UserAgent
 		err = s.sessionManager.CreateSession(
 			ctx,
 			sessionID,
@@ -192,10 +192,10 @@ func (s *Service) RefreshToken(refreshToken string) (*user.LoginResponse, error)
 			s.logger.Error("刷新会话失败", err)
 		}
 
-		// 删除旧会话
+		// 删除旧会�?
 		err = s.sessionManager.DeleteSession(ctx, refreshToken)
 		if err != nil {
-			s.logger.Error("删除旧会话失败", err)
+			s.logger.Error("删除旧会话失�?, err)
 		}
 	}
 
@@ -245,7 +245,7 @@ func (s *Service) Register(req *user.RegisterRequest) (*user.User, error) {
 		return nil, err
 	}
 
-	// 不返回密码
+	// 不返回密�?
 	newUser.Password = ""
 
 	return newUser, nil
@@ -278,3 +278,4 @@ func (s *Service) generateRefreshToken(u *user.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(s.cfg.JWT.Secret))
 }
+

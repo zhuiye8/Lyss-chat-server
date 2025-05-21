@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
 )
 
 // CanvasRepository 表示画布仓库
@@ -16,7 +16,7 @@ type CanvasRepository struct {
 	db *db.Postgres
 }
 
-// NewCanvasRepository 创建一个新的画布仓库
+// NewCanvasRepository 创建一个新的画布仓�?
 func NewCanvasRepository(db *db.Postgres) *CanvasRepository {
 	return &CanvasRepository{
 		db: db,
@@ -30,7 +30,7 @@ func (r *CanvasRepository) Create(canvas *chat.Canvas) error {
 		canvas.ID = uuid.New().String()
 	}
 
-	// 设置时间戳
+	// 设置时间�?
 	now := time.Now()
 	canvas.CreatedAt = now
 	canvas.UpdatedAt = now
@@ -69,7 +69,7 @@ func (r *CanvasRepository) GetByID(id string) (*chat.Canvas, error) {
 	err := r.db.DB.Get(&canvas, query, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, fmt.Errorf("画布不存在: %w", err)
+			return nil, fmt.Errorf("画布不存�? %w", err)
 		}
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (r *CanvasRepository) GetByID(id string) (*chat.Canvas, error) {
 
 // Update 更新画布
 func (r *CanvasRepository) Update(canvas *chat.Canvas) error {
-	// 更新时间戳
+	// 更新时间�?
 	canvas.UpdatedAt = time.Now()
 
 	query := `
@@ -157,3 +157,4 @@ func (r *CanvasRepository) List(workspaceID string, canvasType *string, offset, 
 
 	return canvases, total, nil
 }
+

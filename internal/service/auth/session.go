@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/your-org/lyss-chat-backend/internal/domain/user"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/user"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
 // SessionManager 管理用户会话
@@ -16,7 +16,7 @@ type SessionManager struct {
 	logger *logger.Logger
 }
 
-// RedisClient 是 Redis 客户端接口
+// RedisClient �?Redis 客户端接�?
 type RedisClient interface {
 	Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error
 	Get(ctx context.Context, key string) (string, error)
@@ -42,7 +42,7 @@ type SessionData struct {
 	UserAgent string    `json:"user_agent"`
 }
 
-// CreateSession 创建一个新的会话
+// CreateSession 创建一个新的会�?
 func (m *SessionManager) CreateSession(ctx context.Context, sessionID string, u *user.User, ip, userAgent string, expiration time.Duration) error {
 	sessionData := &SessionData{
 		UserID:    u.ID,
@@ -54,7 +54,7 @@ func (m *SessionManager) CreateSession(ctx context.Context, sessionID string, u 
 		UserAgent: userAgent,
 	}
 
-	// 序列化会话数据
+	// 序列化会话数�?
 	data, err := json.Marshal(sessionData)
 	if err != nil {
 		return err
@@ -95,10 +95,10 @@ func (m *SessionManager) RefreshSession(ctx context.Context, sessionID string, e
 		return err
 	}
 
-	// 更新最后登录时间
+	// 更新最后登录时�?
 	sessionData.LastLogin = time.Now()
 
-	// 序列化会话数据
+	// 序列化会话数�?
 	data, err := json.Marshal(sessionData)
 	if err != nil {
 		return err
@@ -109,10 +109,11 @@ func (m *SessionManager) RefreshSession(ctx context.Context, sessionID string, e
 	return (*m.redis).Set(ctx, key, string(data), expiration)
 }
 
-// ListActiveSessions 列出用户的所有活跃会话
+// ListActiveSessions 列出用户的所有活跃会�?
 func (m *SessionManager) ListActiveSessions(ctx context.Context, userID string) ([]*SessionData, error) {
-	// 注意：这是一个简化实现，实际上需要使用 Redis 的 SCAN 命令
-	// 在真实环境中，应该使用 Redis 的 SCAN 命令或者维护一个用户到会话的映射
-	m.logger.Warn("ListActiveSessions 是一个简化实现，实际应用中应使用 Redis 的 SCAN 命令")
+	// 注意：这是一个简化实现，实际上需要使�?Redis �?SCAN 命令
+	// 在真实环境中，应该使�?Redis �?SCAN 命令或者维护一个用户到会话的映�?
+	m.logger.Warn("ListActiveSessions 是一个简化实现，实际应用中应使用 Redis �?SCAN 命令")
 	return []*SessionData{}, nil
 }
+

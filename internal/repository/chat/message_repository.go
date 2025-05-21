@@ -6,17 +6,17 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
-// MessageRepository 实现了 chat.MessageRepository 接口
+// MessageRepository 实现�?chat.MessageRepository 接口
 type MessageRepository struct {
 	db     *sqlx.DB
 	logger *logger.Logger
 }
 
-// NewMessageRepository 创建一个新的 MessageRepository 实例
+// NewMessageRepository 创建一个新�?MessageRepository 实例
 func NewMessageRepository(db *sqlx.DB, logger *logger.Logger) *MessageRepository {
 	return &MessageRepository{
 		db:     db,
@@ -24,9 +24,9 @@ func NewMessageRepository(db *sqlx.DB, logger *logger.Logger) *MessageRepository
 	}
 }
 
-// Create 创建一个新的消息
+// Create 创建一个新的消�?
 func (r *MessageRepository) Create(message *chat.Message) error {
-	// 将 metadata 转换为 JSON 字符串
+	// �?metadata 转换�?JSON 字符�?
 	var metadataJSON sql.NullString
 	if message.Metadata != nil {
 		metadataBytes, err := json.Marshal(message.Metadata)
@@ -48,7 +48,7 @@ func (r *MessageRepository) Create(message *chat.Message) error {
 		)
 	`
 
-	// 创建一个包含 SQL 兼容字段的匿名结构体
+	// 创建一个包�?SQL 兼容字段的匿名结构体
 	params := struct {
 		ID        string         `db:"id"`
 		CanvasID  string         `db:"canvas_id"`
@@ -66,7 +66,7 @@ func (r *MessageRepository) Create(message *chat.Message) error {
 		CreatedAt: message.CreatedAt,
 	}
 
-	// 处理可能为空的 ParentID
+	// 处理可能为空�?ParentID
 	if message.ParentID != "" {
 		params.ParentID = sql.NullString{
 			String: message.ParentID,
@@ -104,7 +104,7 @@ func (r *MessageRepository) GetByID(id string) (*chat.Message, error) {
 	err := r.db.Get(&result, query, id)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("消息不存在: %s", id)
+			return nil, fmt.Errorf("消息不存�? %s", id)
 		}
 		r.logger.Error("获取消息失败", err)
 		return nil, fmt.Errorf("获取消息失败: %w", err)
@@ -119,18 +119,18 @@ func (r *MessageRepository) GetByID(id string) (*chat.Message, error) {
 		CreatedAt: result.CreatedAt,
 	}
 
-	// 处理可能为空的字段
+	// 处理可能为空的字�?
 	if result.ParentID.Valid {
 		message.ParentID = result.ParentID.String
 	}
 
-	// 解析元数据
+	// 解析元数�?
 	if result.Metadata.Valid {
 		var metadata map[string]interface{}
 		err = json.Unmarshal([]byte(result.Metadata.String), &metadata)
 		if err != nil {
-			r.logger.Error("解析消息元数据失败", err)
-			return nil, fmt.Errorf("解析消息元数据失败: %w", err)
+			r.logger.Error("解析消息元数据失�?, err)
+			return nil, fmt.Errorf("解析消息元数据失�? %w", err)
 		}
 		message.Metadata = metadata
 	}
@@ -192,18 +192,18 @@ func (r *MessageRepository) ListByCanvasID(canvasID string, offset, limit int) (
 			CreatedAt: result.CreatedAt,
 		}
 
-		// 处理可能为空的字段
+		// 处理可能为空的字�?
 		if result.ParentID.Valid {
 			message.ParentID = result.ParentID.String
 		}
 
-		// 解析元数据
+		// 解析元数�?
 		if result.Metadata.Valid {
 			var metadata map[string]interface{}
 			err = json.Unmarshal([]byte(result.Metadata.String), &metadata)
 			if err != nil {
-				r.logger.Error("解析消息元数据失败", err)
-				return nil, 0, fmt.Errorf("解析消息元数据失败: %w", err)
+				r.logger.Error("解析消息元数据失�?, err)
+				return nil, 0, fmt.Errorf("解析消息元数据失�? %w", err)
 			}
 			message.Metadata = metadata
 		}
@@ -212,9 +212,10 @@ func (r *MessageRepository) ListByCanvasID(canvasID string, offset, limit int) (
 	}
 
 	if err = rows.Err(); err != nil {
-		r.logger.Error("迭代消息行失败", err)
-		return nil, 0, fmt.Errorf("迭代消息行失败: %w", err)
+		r.logger.Error("迭代消息行失�?, err)
+		return nil, 0, fmt.Errorf("迭代消息行失�? %w", err)
 	}
 
 	return messages, total, nil
 }
+

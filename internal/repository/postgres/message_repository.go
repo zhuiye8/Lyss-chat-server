@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
 )
 
 // MessageRepository 表示消息仓库
@@ -17,7 +17,7 @@ type MessageRepository struct {
 	db *db.Postgres
 }
 
-// NewMessageRepository 创建一个新的消息仓库
+// NewMessageRepository 创建一个新的消息仓�?
 func NewMessageRepository(db *db.Postgres) *MessageRepository {
 	return &MessageRepository{
 		db: db,
@@ -31,10 +31,10 @@ func (r *MessageRepository) Create(message *chat.Message) error {
 		message.ID = uuid.New().String()
 	}
 
-	// 设置时间戳
+	// 设置时间�?
 	message.CreatedAt = time.Now()
 
-	// 处理元数据
+	// 处理元数�?
 	var metadata []byte
 	var err error
 	if message.Metadata != nil {
@@ -76,7 +76,7 @@ func (r *MessageRepository) GetByID(id string) (*chat.Message, error) {
 	err := r.db.DB.Get(&message, query, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, fmt.Errorf("消息不存在: %w", err)
+			return nil, fmt.Errorf("消息不存�? %w", err)
 		}
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (r *MessageRepository) GetByID(id string) (*chat.Message, error) {
 	return &message, nil
 }
 
-// GetByCanvasID 获取画布的所有消息
+// GetByCanvasID 获取画布的所有消�?
 func (r *MessageRepository) GetByCanvasID(canvasID string, offset, limit int) ([]*chat.Message, int, error) {
 	// 获取总数
 	countQuery := `
@@ -131,7 +131,7 @@ func (r *MessageRepository) GetConversation(messageID string, limit int) ([]*cha
 	// 获取对话历史
 	query := `
 		WITH RECURSIVE conversation AS (
-			-- 基本情况：当前消息
+			-- 基本情况：当前消�?
 			SELECT id, canvas_id, parent_id, role, content, metadata, token_count, created_by, created_at, 0 as depth
 			FROM messages
 			WHERE id = $1
@@ -178,12 +178,12 @@ func (r *MessageRepository) CreateBatch(messages []*chat.Message) error {
 			message.ID = uuid.New().String()
 		}
 
-		// 设置时间戳
+		// 设置时间�?
 		if message.CreatedAt.IsZero() {
 			message.CreatedAt = time.Now()
 		}
 
-		// 处理元数据
+		// 处理元数�?
 		var metadata []byte
 		if message.Metadata != nil {
 			metadata = message.Metadata
@@ -211,3 +211,4 @@ func (r *MessageRepository) CreateBatch(messages []*chat.Message) error {
 
 	return tx.Commit()
 }
+

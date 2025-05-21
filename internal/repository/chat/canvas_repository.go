@@ -5,17 +5,17 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
-// CanvasRepository 实现了 chat.CanvasRepository 接口
+// CanvasRepository 实现�?chat.CanvasRepository 接口
 type CanvasRepository struct {
 	db     *sqlx.DB
 	logger *logger.Logger
 }
 
-// NewCanvasRepository 创建一个新的 CanvasRepository 实例
+// NewCanvasRepository 创建一个新�?CanvasRepository 实例
 func NewCanvasRepository(db *sqlx.DB, logger *logger.Logger) *CanvasRepository {
 	return &CanvasRepository{
 		db:     db,
@@ -23,7 +23,7 @@ func NewCanvasRepository(db *sqlx.DB, logger *logger.Logger) *CanvasRepository {
 	}
 }
 
-// Create 创建一个新的画布
+// Create 创建一个新的画�?
 func (r *CanvasRepository) Create(canvas *chat.Canvas) error {
 	query := `
 		INSERT INTO canvases (
@@ -54,7 +54,7 @@ func (r *CanvasRepository) GetByID(id string) (*chat.Canvas, error) {
 	err := r.db.Get(&canvas, query, id)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("画布不存在: %s", id)
+			return nil, fmt.Errorf("画布不存�? %s", id)
 		}
 		r.logger.Error("获取画布失败", err)
 		return nil, fmt.Errorf("获取画布失败: %w", err)
@@ -97,7 +97,7 @@ func (r *CanvasRepository) Delete(id string) error {
 	return nil
 }
 
-// List 列出工作区下的画布
+// List 列出工作区下的画�?
 func (r *CanvasRepository) List(workspaceID string, canvasType *string, offset, limit int) ([]*chat.Canvas, int, error) {
 	// 构建查询条件
 	whereClause := "WHERE workspace_id = $1"
@@ -142,3 +142,4 @@ func (r *CanvasRepository) List(workspaceID string, canvasType *string, offset, 
 
 	return canvases, total, nil
 }
+

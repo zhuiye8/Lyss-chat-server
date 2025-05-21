@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
 )
 
 // Redis 表示 Redis 连接
@@ -13,7 +13,7 @@ type Redis struct {
 	Client *redis.Client
 }
 
-// NewRedis 创建一个新的 Redis 连接
+// NewRedis 创建一个新�?Redis 连接
 func NewRedis(cfg config.RedisConfig) (*Redis, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
@@ -34,3 +34,4 @@ func NewRedis(cfg config.RedisConfig) (*Redis, error) {
 func (r *Redis) Close() error {
 	return r.Client.Close()
 }
+

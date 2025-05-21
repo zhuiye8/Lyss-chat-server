@@ -5,7 +5,7 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
 // Logger 创建一个日志中间件
@@ -36,18 +36,18 @@ func Logger(log *logger.Logger) func(http.Handler) http.Handler {
 	}
 }
 
-// Recover 创建一个恢复中间件，用于捕获 panic
+// Recover 创建一个恢复中间件，用于捕�?panic
 func Recover(log *logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if err := recover(); err != nil {
 					// 记录 panic 信息
-					log.Error("服务器 panic", err)
+					log.Error("服务�?panic", err)
 					log.Debug(string(debug.Stack()))
 
 					// 返回 500 错误
-					http.Error(w, "内部服务器错误", http.StatusInternalServerError)
+					http.Error(w, "内部服务器错�?, http.StatusInternalServerError)
 				}
 			}()
 
@@ -56,11 +56,11 @@ func Recover(log *logger.Logger) func(http.Handler) http.Handler {
 	}
 }
 
-// CORS 创建一个 CORS 中间件
+// CORS 创建一�?CORS 中间�?
 func CORS() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// 设置 CORS 头
+			// 设置 CORS �?
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
@@ -87,3 +87,4 @@ func (w *responseWriterWrapper) WriteHeader(statusCode int) {
 	w.statusCode = statusCode
 	w.ResponseWriter.WriteHeader(statusCode)
 }
+

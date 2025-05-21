@@ -9,16 +9,16 @@ import (
 
 	"github.com/cloudwego/eino/schema"
 	"github.com/sashabaranov/go-openai"
-	"github.com/your-org/lyss-chat-backend/internal/ai/providers"
-	"github.com/your-org/lyss-chat-backend/internal/domain/model"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/ai/providers"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/model"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
 const (
 	ProviderID = "openai"
 )
 
-// 支持的模型列表
+// 支持的模型列�?
 var supportedModels = []*model.Model{
 	{
 		ID:         "gpt-3.5-turbo",
@@ -43,16 +43,16 @@ var supportedModels = []*model.Model{
 	},
 }
 
-// Provider 实现 OpenAI 提供商
+// Provider 实现 OpenAI 提供�?
 type Provider struct {
 	client *openai.Client
 	logger *logger.Logger
 }
 
-// Factory 实现 OpenAI 提供商工厂
+// Factory 实现 OpenAI 提供商工�?
 type Factory struct{}
 
-// Create 创建 OpenAI 提供商实例
+// Create 创建 OpenAI 提供商实�?
 func (f *Factory) Create(apiKey string, logger *logger.Logger) (providers.Provider, error) {
 	if apiKey == "" {
 		return nil, providers.ErrInvalidAPIKey
@@ -65,7 +65,7 @@ func (f *Factory) Create(apiKey string, logger *logger.Logger) (providers.Provid
 	}, nil
 }
 
-// GetName 获取提供商名称
+// GetName 获取提供商名�?
 func (p *Provider) GetName() string {
 	return "OpenAI"
 }
@@ -91,7 +91,7 @@ func (p *Provider) Call(ctx context.Context, modelID string, messages []*schema.
 		Messages: openaiMessages,
 	}
 
-	// 应用可选参数
+	// 应用可选参�?
 	if params != nil {
 		if temp, ok := params["temperature"].(float64); ok {
 			req.Temperature = float32(temp)
@@ -117,7 +117,7 @@ func (p *Provider) Call(ctx context.Context, modelID string, messages []*schema.
 		return nil, fmt.Errorf("%w: %v", providers.ErrAPICallFailed, err)
 	}
 
-	// 检查响应
+	// 检查响�?
 	if len(resp.Choices) == 0 {
 		return nil, errors.New("OpenAI 返回了空响应")
 	}
@@ -146,7 +146,7 @@ func (p *Provider) Stream(ctx context.Context, modelID string, messages []*schem
 		Stream:   true,
 	}
 
-	// 应用可选参数
+	// 应用可选参�?
 	if params != nil {
 		if temp, ok := params["temperature"].(float64); ok {
 			req.Temperature = float32(temp)
@@ -185,7 +185,7 @@ func (p *Provider) Stream(ctx context.Context, modelID string, messages []*schem
 		for {
 			response, err := stream.Recv()
 			if errors.Is(err, io.EOF) {
-				// 流结束
+				// 流结�?
 				break
 			}
 
@@ -202,7 +202,7 @@ func (p *Provider) Stream(ctx context.Context, modelID string, messages []*schem
 			// 累积内容
 			fullContent.WriteString(response.Choices[0].Delta.Content)
 
-			// 发送消息
+			// 发送消�?
 			outputChan <- &schema.Message{
 				Role:    "assistant",
 				Content: fullContent.String(),
@@ -223,7 +223,7 @@ func (p *Provider) isModelSupported(modelID string) bool {
 	return false
 }
 
-// convertToOpenAIMessages 将 schema.Message 转换为 OpenAI 消息
+// convertToOpenAIMessages �?schema.Message 转换�?OpenAI 消息
 func convertToOpenAIMessages(messages []*schema.Message) []openai.ChatCompletionMessage {
 	openaiMessages := make([]openai.ChatCompletionMessage, 0, len(messages))
 	for _, msg := range messages {
@@ -234,3 +234,4 @@ func convertToOpenAIMessages(messages []*schema.Message) []openai.ChatCompletion
 	}
 	return openaiMessages
 }
+

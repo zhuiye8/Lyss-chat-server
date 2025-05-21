@@ -5,15 +5,15 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
 )
 
-// Postgres 表示 PostgreSQL 数据库连接
+// Postgres 表示 PostgreSQL 数据库连�?
 type Postgres struct {
 	DB *sqlx.DB
 }
 
-// NewPostgres 创建一个新的 PostgreSQL 数据库连接
+// NewPostgres 创建一个新�?PostgreSQL 数据库连�?
 func NewPostgres(cfg config.DatabaseConfig) (*Postgres, error) {
 	dsn := fmt.Sprintf(
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
@@ -25,14 +25,15 @@ func NewPostgres(cfg config.DatabaseConfig) (*Postgres, error) {
 		return nil, err
 	}
 
-	// 设置连接池参数
+	// 设置连接池参�?
 	db.SetMaxOpenConns(25)
 	db.SetMaxIdleConns(5)
 
 	return &Postgres{DB: db}, nil
 }
 
-// Close 关闭数据库连接
+// Close 关闭数据库连�?
 func (p *Postgres) Close() error {
 	return p.DB.Close()
 }
+

@@ -7,10 +7,10 @@ import (
 
 	"github.com/cloudwego/eino/schema"
 	"github.com/google/uuid"
-	"github.com/your-org/lyss-chat-backend/internal/ai/providers"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/internal/domain/model"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/ai/providers"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/model"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
 // ModelRepository 定义模型仓储接口
@@ -22,7 +22,7 @@ type ModelRepository interface {
 	List(providerID *string, status *string, offset, limit int) ([]*model.Model, int, error)
 }
 
-// ProviderRepository 定义提供商仓储接口
+// ProviderRepository 定义提供商仓储接�?
 type ProviderRepository interface {
 	Create(provider *model.Provider) error
 	GetByID(id string) (*model.Provider, error)
@@ -58,7 +58,7 @@ type ModelService struct {
 	logger       *logger.Logger
 }
 
-// NewModelService 创建一个新的 ModelService 实例
+// NewModelService 创建一个新�?ModelService 实例
 func NewModelService(
 	modelRepo ModelRepository,
 	providerRepo ProviderRepository,
@@ -79,7 +79,7 @@ func NewModelService(
 
 // CreateProvider 创建一个新的提供商
 func (s *ModelService) CreateProvider(ctx context.Context, name, description string) (*model.Provider, error) {
-	// 创建提供商对象
+	// 创建提供商对�?
 	now := time.Now().UTC().Format(time.RFC3339)
 	provider := &model.Provider{
 		ID:          uuid.New().String(),
@@ -99,14 +99,14 @@ func (s *ModelService) CreateProvider(ctx context.Context, name, description str
 	return provider, nil
 }
 
-// GetProvider 获取提供商详情
+// GetProvider 获取提供商详�?
 func (s *ModelService) GetProvider(ctx context.Context, id string) (*model.Provider, error) {
 	return s.providerRepo.GetByID(id)
 }
 
-// UpdateProvider 更新提供商
+// UpdateProvider 更新提供�?
 func (s *ModelService) UpdateProvider(ctx context.Context, id, name, description string, status string) (*model.Provider, error) {
-	// 获取现有提供商
+	// 获取现有提供�?
 	provider, err := s.providerRepo.GetByID(id)
 	if err != nil {
 		return nil, err
@@ -121,7 +121,7 @@ func (s *ModelService) UpdateProvider(ctx context.Context, id, name, description
 	}
 	if status != "" {
 		if status != model.ProviderStatusActive && status != model.ProviderStatusInactive {
-			return nil, fmt.Errorf("无效的提供商状态: %s", status)
+			return nil, fmt.Errorf("无效的提供商状�? %s", status)
 		}
 		provider.Status = status
 	}
@@ -138,7 +138,7 @@ func (s *ModelService) UpdateProvider(ctx context.Context, id, name, description
 	return provider, nil
 }
 
-// DeleteProvider 删除提供商
+// DeleteProvider 删除提供�?
 func (s *ModelService) DeleteProvider(ctx context.Context, id string) error {
 	// 检查提供商是否存在
 	_, err := s.providerRepo.GetByID(id)
@@ -146,25 +146,25 @@ func (s *ModelService) DeleteProvider(ctx context.Context, id string) error {
 		return err
 	}
 
-	// 删除提供商
+	// 删除提供�?
 	return s.providerRepo.Delete(id)
 }
 
-// ListProviders 获取提供商列表
+// ListProviders 获取提供商列�?
 func (s *ModelService) ListProviders(ctx context.Context, page, pageSize int) ([]*model.Provider, int, error) {
-	// 计算偏移量
+	// 计算偏移�?
 	offset := (page - 1) * pageSize
 	if offset < 0 {
 		offset = 0
 	}
 
-	// 获取提供商列表
+	// 获取提供商列�?
 	return s.providerRepo.List(offset, pageSize)
 }
 
-// CreateAPIKey 创建一个新的 API 密钥
+// CreateAPIKey 创建一个新�?API 密钥
 func (s *ModelService) CreateAPIKey(ctx context.Context, providerID, name, key string) (*model.APIKey, error) {
-	// 验证提供商是否存在
+	// 验证提供商是否存�?
 	_, err := s.providerRepo.GetByID(providerID)
 	if err != nil {
 		return nil, err
@@ -195,7 +195,7 @@ func (s *ModelService) GetAPIKey(ctx context.Context, id string) (*model.APIKey,
 	return s.apiKeyRepo.GetByID(id)
 }
 
-// GetAPIKeyByProviderID 根据提供商 ID 获取 API 密钥
+// GetAPIKeyByProviderID 根据提供�?ID 获取 API 密钥
 func (s *ModelService) GetAPIKeyByProviderID(ctx context.Context, providerID string) (*model.APIKey, error) {
 	return s.apiKeyRepo.GetByProviderID(providerID)
 }
@@ -230,7 +230,7 @@ func (s *ModelService) UpdateAPIKey(ctx context.Context, id, name, key string) (
 
 // DeleteAPIKey 删除 API 密钥
 func (s *ModelService) DeleteAPIKey(ctx context.Context, id string) error {
-	// 检查 API 密钥是否存在
+	// 检�?API 密钥是否存在
 	_, err := s.apiKeyRepo.GetByID(id)
 	if err != nil {
 		return err
@@ -242,7 +242,7 @@ func (s *ModelService) DeleteAPIKey(ctx context.Context, id string) error {
 
 // ListAPIKeys 获取 API 密钥列表
 func (s *ModelService) ListAPIKeys(ctx context.Context, providerID *string, page, pageSize int) ([]*model.APIKey, int, error) {
-	// 计算偏移量
+	// 计算偏移�?
 	offset := (page - 1) * pageSize
 	if offset < 0 {
 		offset = 0
@@ -252,9 +252,9 @@ func (s *ModelService) ListAPIKeys(ctx context.Context, providerID *string, page
 	return s.apiKeyRepo.List(providerID, offset, pageSize)
 }
 
-// CreateModel 创建一个新的模型
+// CreateModel 创建一个新的模�?
 func (s *ModelService) CreateModel(ctx context.Context, providerID, name string, isPublic bool) (*model.Model, error) {
-	// 验证提供商是否存在
+	// 验证提供商是否存�?
 	_, err := s.providerRepo.GetByID(providerID)
 	if err != nil {
 		return nil, err
@@ -300,7 +300,7 @@ func (s *ModelService) UpdateModel(ctx context.Context, id, name string, status 
 	}
 	if status != "" {
 		if status != model.ModelStatusActive && status != model.ModelStatusInactive {
-			return nil, fmt.Errorf("无效的模型状态: %s", status)
+			return nil, fmt.Errorf("无效的模型状�? %s", status)
 		}
 		model.Status = status
 	}
@@ -322,7 +322,7 @@ func (s *ModelService) UpdateModel(ctx context.Context, id, name string, status 
 
 // DeleteModel 删除模型
 func (s *ModelService) DeleteModel(ctx context.Context, id string) error {
-	// 检查模型是否存在
+	// 检查模型是否存�?
 	_, err := s.modelRepo.GetByID(id)
 	if err != nil {
 		return err
@@ -334,7 +334,7 @@ func (s *ModelService) DeleteModel(ctx context.Context, id string) error {
 
 // ListModels 获取模型列表
 func (s *ModelService) ListModels(ctx context.Context, providerID *string, status *string, page, pageSize int) ([]*model.Model, int, error) {
-	// 计算偏移量
+	// 计算偏移�?
 	offset := (page - 1) * pageSize
 	if offset < 0 {
 		offset = 0
@@ -358,7 +358,7 @@ func (s *ModelService) CallModel(ctx context.Context, modelID string, messages [
 		return nil, err
 	}
 
-	// 获取提供商
+	// 获取提供�?
 	provider, err := s.registry.GetProvider(model.ProviderID, apiKey.Key)
 	if err != nil {
 		return nil, err
@@ -382,7 +382,7 @@ func (s *ModelService) StreamModel(ctx context.Context, modelID string, messages
 		return nil, err
 	}
 
-	// 获取提供商
+	// 获取提供�?
 	provider, err := s.registry.GetProvider(model.ProviderID, apiKey.Key)
 	if err != nil {
 		return nil, err
@@ -391,3 +391,4 @@ func (s *ModelService) StreamModel(ctx context.Context, modelID string, messages
 	// 流式调用模型
 	return provider.Stream(ctx, modelID, messages, nil)
 }
+

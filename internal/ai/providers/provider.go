@@ -4,13 +4,13 @@ import (
 	"context"
 
 	"github.com/cloudwego/eino/schema"
-	"github.com/your-org/lyss-chat-backend/internal/domain/model"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/model"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
-// Provider 定义模型提供商接口
+// Provider 定义模型提供商接�?
 type Provider interface {
-	// GetName 获取提供商名称
+	// GetName 获取提供商名�?
 	GetName() string
 
 	// GetModels 获取提供商支持的模型列表
@@ -23,9 +23,9 @@ type Provider interface {
 	Stream(ctx context.Context, modelID string, messages []*schema.Message, params map[string]interface{}) (<-chan *schema.Message, error)
 }
 
-// ProviderFactory 定义提供商工厂接口
+// ProviderFactory 定义提供商工厂接�?
 type ProviderFactory interface {
-	// Create 创建提供商实例
+	// Create 创建提供商实�?
 	Create(apiKey string, logger *logger.Logger) (Provider, error)
 }
 
@@ -36,7 +36,7 @@ type ProviderRegistry struct {
 	logger    *logger.Logger
 }
 
-// NewProviderRegistry 创建一个新的提供商注册表
+// NewProviderRegistry 创建一个新的提供商注册�?
 func NewProviderRegistry(logger *logger.Logger) *ProviderRegistry {
 	return &ProviderRegistry{
 		factories: make(map[string]ProviderFactory),
@@ -45,31 +45,31 @@ func NewProviderRegistry(logger *logger.Logger) *ProviderRegistry {
 	}
 }
 
-// RegisterFactory 注册提供商工厂
+// RegisterFactory 注册提供商工�?
 func (r *ProviderRegistry) RegisterFactory(providerID string, factory ProviderFactory) {
 	r.factories[providerID] = factory
 }
 
-// GetProvider 获取提供商实例
+// GetProvider 获取提供商实�?
 func (r *ProviderRegistry) GetProvider(providerID string, apiKey string) (Provider, error) {
-	// 检查是否已经创建了提供商实例
+	// 检查是否已经创建了提供商实�?
 	if provider, ok := r.providers[providerID]; ok {
 		return provider, nil
 	}
 
-	// 获取提供商工厂
+	// 获取提供商工�?
 	factory, ok := r.factories[providerID]
 	if !ok {
 		return nil, ErrProviderNotFound
 	}
 
-	// 创建提供商实例
+	// 创建提供商实�?
 	provider, err := factory.Create(apiKey, r.logger)
 	if err != nil {
 		return nil, err
 	}
 
-	// 缓存提供商实例
+	// 缓存提供商实�?
 	r.providers[providerID] = provider
 
 	return provider, nil
@@ -92,12 +92,12 @@ var (
 	ErrAPICallFailed    = NewError("API call failed")
 )
 
-// Error 定义提供商错误
+// Error 定义提供商错�?
 type Error struct {
 	Message string
 }
 
-// NewError 创建一个新的错误
+// NewError 创建一个新的错�?
 func NewError(message string) *Error {
 	return &Error{Message: message}
 }
@@ -106,3 +106,4 @@ func NewError(message string) *Error {
 func (e *Error) Error() string {
 	return e.Message
 }
+

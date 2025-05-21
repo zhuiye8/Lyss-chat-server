@@ -8,13 +8,13 @@ import (
 
 	"github.com/cloudwego/eino/schema"
 	"github.com/google/uuid"
-	"github.com/your-org/lyss-chat-backend/internal/ai/graphs"
-	"github.com/your-org/lyss-chat-backend/internal/domain/chat"
-	"github.com/your-org/lyss-chat-backend/internal/domain/model"
-	"github.com/your-org/lyss-chat-backend/internal/repository/postgres"
-	"github.com/your-org/lyss-chat-backend/pkg/config"
-	"github.com/your-org/lyss-chat-backend/pkg/db"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/ai/graphs"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/chat"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/model"
+	"github.com/zhuiye8/Lyss-chat-server/internal/repository/postgres"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
 // Service 表示聊天服务
@@ -26,7 +26,7 @@ type Service struct {
 	logger      *logger.Logger
 }
 
-// NewService 创建一个新的聊天服务
+// NewService 创建一个新的聊天服�?
 func NewService(
 	database *db.Postgres,
 	aiGraphs *graphs.ChatGraphs,
@@ -46,9 +46,9 @@ func NewService(
 	}
 }
 
-// CreateCanvas 创建一个新的画布
+// CreateCanvas 创建一个新的画�?
 func (s *Service) CreateCanvas(userID string, req *chat.CreateCanvasRequest) (*chat.Canvas, error) {
-	// 设置默认状态
+	// 设置默认状�?
 	status := chat.CanvasStatusActive
 
 	// 创建画布
@@ -76,7 +76,7 @@ func (s *Service) CreateCanvas(userID string, req *chat.CreateCanvasRequest) (*c
 		ID:        uuid.New().String(),
 		CanvasID:  canvas.ID,
 		Role:      chat.MessageRoleSystem,
-		Content:   "欢迎使用 Lyss Chat！我是您的 AI 助手，有什么可以帮您的吗？",
+		Content:   "欢迎使用 Lyss Chat！我是您�?AI 助手，有什么可以帮您的吗？",
 		CreatedBy: userID,
 		CreatedAt: time.Now(),
 	}
@@ -85,7 +85,7 @@ func (s *Service) CreateCanvas(userID string, req *chat.CreateCanvasRequest) (*c
 	err = s.messageRepo.Create(systemMessage)
 	if err != nil {
 		s.logger.Error("创建系统消息失败", err)
-		// 继续处理，不要因为系统消息创建失败而阻止画布创建
+		// 继续处理，不要因为系统消息创建失败而阻止画布创�?
 	}
 
 	return canvas, nil
@@ -138,7 +138,7 @@ func (s *Service) ListCanvases(workspaceID string, canvasType *string, page, pag
 	return s.canvasRepo.List(workspaceID, canvasType, offset, pageSize)
 }
 
-// SendMessage 发送消息
+// SendMessage 发送消�?
 func (s *Service) SendMessage(userID, canvasID string, req *chat.SendMessageRequest) (*chat.Message, error) {
 	// 获取画布
 	canvas, err := s.canvasRepo.GetByID(canvasID)
@@ -178,7 +178,7 @@ func (s *Service) SendMessage(userID, canvasID string, req *chat.SendMessageRequ
 	// 添加当前用户消息
 	history = append(history, userMessage)
 
-	// 转换为 Eino 消息格式
+	// 转换�?Eino 消息格式
 	einoMessages := make([]*schema.Message, 0, len(history))
 	for _, msg := range history {
 		einoMessages = append(einoMessages, &schema.Message{
@@ -237,7 +237,7 @@ func (s *Service) GetMessages(canvasID string, page, pageSize int) ([]*chat.Mess
 	return s.messageRepo.GetByCanvasID(canvasID, offset, pageSize)
 }
 
-// StreamMessage 流式发送消息
+// StreamMessage 流式发送消�?
 func (s *Service) StreamMessage(userID, canvasID string, req *chat.SendMessageRequest) (<-chan *chat.Message, error) {
 	// 获取画布
 	canvas, err := s.canvasRepo.GetByID(canvasID)
@@ -277,7 +277,7 @@ func (s *Service) StreamMessage(userID, canvasID string, req *chat.SendMessageRe
 	// 添加当前用户消息
 	history = append(history, userMessage)
 
-	// 转换为 Eino 消息格式
+	// 转换�?Eino 消息格式
 	einoMessages := make([]*schema.Message, 0, len(history))
 	for _, msg := range history {
 		einoMessages = append(einoMessages, &schema.Message{
@@ -347,7 +347,7 @@ func (s *Service) StreamMessage(userID, canvasID string, req *chat.SendMessageRe
 			}
 		}
 
-		// 保存完整的 AI 响应消息
+		// 保存完整�?AI 响应消息
 		aiMessage.Content = fullContent
 		err = s.messageRepo.Create(aiMessage)
 		if err != nil {
@@ -357,3 +357,4 @@ func (s *Service) StreamMessage(userID, canvasID string, req *chat.SendMessageRe
 
 	return resultChan, nil
 }
+

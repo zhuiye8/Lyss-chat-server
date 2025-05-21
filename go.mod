@@ -1,4 +1,4 @@
-module github.com/your-org/lyss-chat-2.0/backend
+module github.com/zhuiye8/Lyss-chat-server
 
 go 1.24.0
 

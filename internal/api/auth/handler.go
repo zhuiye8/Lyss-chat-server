@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/your-org/lyss-chat-backend/internal/domain/user"
-	"github.com/your-org/lyss-chat-backend/internal/service/auth"
-	"github.com/your-org/lyss-chat-backend/internal/util"
-	"github.com/your-org/lyss-chat-backend/pkg/config"
-	"github.com/your-org/lyss-chat-backend/pkg/db"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/user"
+	"github.com/zhuiye8/Lyss-chat-server/internal/service/auth"
+	"github.com/zhuiye8/Lyss-chat-server/internal/util"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
-// Handler 表示认证处理器
+// Handler 表示认证处理�?
 type Handler struct {
 	service *auth.Service
 	logger  *logger.Logger
@@ -42,7 +42,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 获取客户端 IP 和 User-Agent
+	// 获取客户�?IP �?User-Agent
 	req.IP = r.RemoteAddr
 	req.UserAgent = r.UserAgent()
 
@@ -52,7 +52,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.service.Login(&req)
 	if err != nil {
 		h.logger.Error("登录失败", err)
-		util.UnauthorizedError(w, "邮箱或密码错误")
+		util.UnauthorizedError(w, "邮箱或密码错�?)
 		return
 	}
 
@@ -79,7 +79,7 @@ func (h *Handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.service.RefreshToken(req.RefreshToken)
 	if err != nil {
 		h.logger.Error("刷新令牌失败", err)
-		util.UnauthorizedError(w, "无效的刷新令牌")
+		util.UnauthorizedError(w, "无效的刷新令�?)
 		return
 	}
 
@@ -100,7 +100,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 获取客户端 IP 和 User-Agent
+	// 获取客户�?IP �?User-Agent
 	req.IP = r.RemoteAddr
 	req.UserAgent = r.UserAgent()
 
@@ -125,8 +125,8 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 
 	loginResp, err := h.service.Login(loginReq)
 	if err != nil {
-		h.logger.Error("注册后自动登录失败", err)
-		// 返回用户信息，但不包含令牌
+		h.logger.Error("注册后自动登录失�?, err)
+		// 返回用户信息，但不包含令�?
 		util.SuccessResponse(w, newUser, http.StatusCreated)
 		return
 	}
@@ -134,3 +134,4 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	// 返回登录响应
 	util.SuccessResponse(w, loginResp, http.StatusCreated)
 }
+

@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/your-org/lyss-chat-backend/internal/domain/user"
-	"github.com/your-org/lyss-chat-backend/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/internal/domain/user"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
 )
 
 // UserRepository 表示用户仓库
@@ -15,7 +15,7 @@ type UserRepository struct {
 	db *db.Postgres
 }
 
-// NewUserRepository 创建一个新的用户仓库
+// NewUserRepository 创建一个新的用户仓�?
 func NewUserRepository(db *db.Postgres) *UserRepository {
 	return &UserRepository{
 		db: db,
@@ -60,7 +60,7 @@ func (r *UserRepository) GetByID(id string) (*user.User, error) {
 	err := r.db.DB.Get(&u, query, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, fmt.Errorf("用户不存在: %w", err)
+			return nil, fmt.Errorf("用户不存�? %w", err)
 		}
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func (r *UserRepository) GetByEmail(email, tenantID string) (*user.User, error) 
 	err := r.db.DB.Get(&u, query, email, tenantID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, fmt.Errorf("用户不存在: %w", err)
+			return nil, fmt.Errorf("用户不存�? %w", err)
 		}
 		return nil, err
 	}
@@ -150,3 +150,4 @@ func (r *UserRepository) List(tenantID string, offset, limit int) ([]*user.User,
 
 	return users, total, nil
 }
+

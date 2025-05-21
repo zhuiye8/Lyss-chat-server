@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
-// Logger 中间件记录请求日志
+// Logger 中间件记录请求日�?
 func Logger(log *logger.Logger) mux.MiddlewareFunc {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -47,3 +47,4 @@ func (rw *responseWriter) WriteHeader(code int) {
 	rw.statusCode = code
 	rw.ResponseWriter.WriteHeader(code)
 }
+

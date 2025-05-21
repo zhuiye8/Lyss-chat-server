@@ -7,16 +7,16 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
 )
 
 // contextKey 是用于上下文的键类型
 type contextKey string
 
-// UserIDKey 是用户 ID 的上下文键
+// UserIDKey 是用�?ID 的上下文�?
 const UserIDKey contextKey = "user_id"
 
-// TenantIDKey 是租户 ID 的上下文键
+// TenantIDKey 是租�?ID 的上下文�?
 const TenantIDKey contextKey = "tenant_id"
 
 // Auth 创建一个认证中间件
@@ -26,7 +26,7 @@ func Auth(cfg *config.Config) func(http.Handler) http.Handler {
 			// 从请求头获取令牌
 			authHeader := r.Header.Get("Authorization")
 			if authHeader == "" {
-				http.Error(w, "未提供认证令牌", http.StatusUnauthorized)
+				http.Error(w, "未提供认证令�?, http.StatusUnauthorized)
 				return
 			}
 
@@ -34,20 +34,20 @@ func Auth(cfg *config.Config) func(http.Handler) http.Handler {
 			tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 			claims, err := validateToken(tokenString, cfg.JWT.Secret)
 			if err != nil {
-				http.Error(w, "无效的认证令牌", http.StatusUnauthorized)
+				http.Error(w, "无效的认证令�?, http.StatusUnauthorized)
 				return
 			}
 
-			// 将用户 ID 和租户 ID 添加到上下文
+			// 将用�?ID 和租�?ID 添加到上下文
 			userID, ok := claims["user_id"].(string)
 			if !ok {
-				http.Error(w, "无效的认证令牌", http.StatusUnauthorized)
+				http.Error(w, "无效的认证令�?, http.StatusUnauthorized)
 				return
 			}
 
 			tenantID, ok := claims["tenant_id"].(string)
 			if !ok {
-				http.Error(w, "无效的认证令牌", http.StatusUnauthorized)
+				http.Error(w, "无效的认证令�?, http.StatusUnauthorized)
 				return
 			}
 
@@ -65,7 +65,7 @@ func validateToken(tokenString, secret string) (jwt.MapClaims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// 验证签名算法
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("无效的签名算法")
+			return nil, errors.New("无效的签名算�?)
 		}
 		return []byte(secret), nil
 	})
@@ -75,12 +75,12 @@ func validateToken(tokenString, secret string) (jwt.MapClaims, error) {
 	}
 
 	if !token.Valid {
-		return nil, errors.New("无效的令牌")
+		return nil, errors.New("无效的令�?)
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, errors.New("无效的令牌声明")
+		return nil, errors.New("无效的令牌声�?)
 	}
 
 	return claims, nil
@@ -97,3 +97,4 @@ func GetTenantID(ctx context.Context) (string, bool) {
 	tenantID, ok := ctx.Value(TenantIDKey).(string)
 	return tenantID, ok
 }
+

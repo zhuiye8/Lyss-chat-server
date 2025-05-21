@@ -2,14 +2,14 @@ package api
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/your-org/lyss-chat-2.0/backend/internal/api/auth"
-	"github.com/your-org/lyss-chat-2.0/backend/internal/api/chat"
-	"github.com/your-org/lyss-chat-2.0/backend/internal/api/model"
-	"github.com/your-org/lyss-chat-2.0/backend/internal/api/user"
-	"github.com/your-org/lyss-chat-2.0/backend/internal/middleware"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/config"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/db"
-	"github.com/your-org/lyss-chat-2.0/backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/api/auth"
+	"github.com/zhuiye8/Lyss-chat-server/internal/api/chat"
+	"github.com/zhuiye8/Lyss-chat-server/internal/api/model"
+	"github.com/zhuiye8/Lyss-chat-server/internal/api/user"
+	"github.com/zhuiye8/Lyss-chat-server/internal/middleware"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/config"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/db"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
 // RegisterRoutes 注册所有 API 路由

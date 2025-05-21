@@ -5,13 +5,13 @@ import (
 
 	"github.com/cloudwego/eino/compose"
 	"github.com/cloudwego/eino/schema"
-	"github.com/your-org/lyss-chat-backend/internal/ai/components"
-	"github.com/your-org/lyss-chat-backend/pkg/logger"
+	"github.com/zhuiye8/Lyss-chat-server/internal/ai/components"
+	"github.com/zhuiye8/Lyss-chat-server/pkg/logger"
 )
 
 // 聊天模板
-const chatTemplate = `你是一个有用的AI助手。请根据用户的问题提供准确、有帮助的回答。
-如果你不知道答案，请诚实地说你不知道，不要编造信息。
+const chatTemplate = `你是一个有用的AI助手。请根据用户的问题提供准确、有帮助的回答�?
+如果你不知道答案，请诚实地说你不知道，不要编造信息�?
 `
 
 // ChatGraph 表示聊天图形
@@ -19,7 +19,7 @@ type ChatGraph struct {
 	graph *compose.CompiledGraph[map[string]any, *schema.Message]
 }
 
-// NewChatGraph 创建一个新的聊天图形
+// NewChatGraph 创建一个新的聊天图�?
 func NewChatGraph(ctx context.Context, model components.ChatModelAdapter, logger *logger.Logger) (*ChatGraph, error) {
 	// 创建图形
 	graph := compose.NewGraph[map[string]any, *schema.Message]()
@@ -36,7 +36,7 @@ func NewChatGraph(ctx context.Context, model components.ChatModelAdapter, logger
 		return nil, err
 	}
 
-	// 添加边
+	// 添加�?
 	err = graph.AddEdge(compose.START, "node_template")
 	if err != nil {
 		return nil, err
@@ -67,3 +67,4 @@ func (g *ChatGraph) Invoke(ctx context.Context, input map[string]any) (*schema.M
 func (g *ChatGraph) Stream(ctx context.Context, input map[string]any) (<-chan *schema.Message, error) {
 	return g.graph.Stream(ctx, input)
 }
+
